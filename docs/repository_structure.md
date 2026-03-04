@@ -11,6 +11,7 @@ TerraDriftGuard/
         repository_structure.md
 
         diagrams/
+            terradriftguard-architecture.svg
     
 
     evidence/

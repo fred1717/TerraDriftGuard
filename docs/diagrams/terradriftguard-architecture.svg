@@ -1,0 +1,303 @@
+<svg width="1400" height="1020" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <style>
+      .t-title    { font-size:20px; font-weight:700; fill:#212529; }
+      .t-sub      { font-size:12px; fill:#6c757d; }
+      .t-section  { font-size:13px; font-weight:700; }
+      .t-label    { font-size:11px; font-weight:600; fill:#fff; }
+      .t-detail   { font-size:9px; fill:#fff; }
+      .t-detail-dk { font-size:9px; fill:#495057; }
+      .t-small    { font-size:8px; font-weight:600; fill:#fff; }
+      .t-legend   { font-size:10px; fill:#495057; }
+      .t-legend-h { font-size:11px; font-weight:700; fill:#212529; }
+      .t-cost     { font-size:9px; fill:#495057; }
+    </style>
+    <marker id="ah"        markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#495057"/></marker>
+    <marker id="ah-blue"   markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#1a73e8"/></marker>
+    <marker id="ah-purple" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#945bb4"/></marker>
+    <marker id="ah-pink"   markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#E7157B"/></marker>
+    <marker id="ah-red"    markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#e8334c"/></marker>
+    <marker id="ah-dk"     markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#24292e"/></marker>
+    <marker id="ah-gha"    markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#7b42bc"/></marker>
+  </defs>
+
+  <!-- ================================================================ -->
+  <!-- TITLE                                                             -->
+  <!-- ================================================================ -->
+  <text x="700" y="32" text-anchor="middle" class="t-title">TerraDriftGuard — Architecture</text>
+  <text x="700" y="50" text-anchor="middle" class="t-sub">AWS Config · EventBridge · Step Functions · Lambda · Bedrock · DynamoDB · GitHub Actions · Terraform</text>
+
+  <!-- ================================================================ -->
+  <!-- TRIGGER SECTION (left)                                            -->
+  <!-- ================================================================ -->
+  <rect x="15" y="68" width="295" height="400" rx="6" fill="#fff5f5" stroke="#dd344c" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="162" y="87" text-anchor="middle" class="t-section" style="fill:#dd344c;">Drift Triggers</text>
+
+  <!-- AWS Config sub-container -->
+  <rect x="30" y="96" width="265" height="215" rx="5" fill="#fde8ec" stroke="#dd344c" stroke-width="1.2"/>
+  <text x="162" y="114" text-anchor="middle" style="font-size:12px; font-weight:700; fill:#b02a3d;">AWS Config</text>
+
+  <!-- restricted-ssh -->
+  <rect x="45" y="120" width="235" height="48" rx="4" fill="#dd344c" stroke="#b02a3d" stroke-width="1.2"/>
+  <text x="162" y="138" text-anchor="middle" class="t-label">restricted-ssh</text>
+  <text x="162" y="153" text-anchor="middle" class="t-detail">INCOMING_SSH_DISABLED · AWS::EC2::SecurityGroup</text>
+
+  <!-- s3-bucket-public-read-prohibited -->
+  <rect x="45" y="183" width="235" height="48" rx="4" fill="#dd344c" stroke="#b02a3d" stroke-width="1.2"/>
+  <text x="162" y="199" text-anchor="middle" style="font-size:10px; font-weight:600; fill:#fff;">s3-bucket-public-read-prohibited</text>
+  <text x="162" y="216" text-anchor="middle" class="t-detail">S3_BUCKET_PUBLIC_READ_PROHIBITED · AWS::S3::Bucket</text>
+
+  <!-- iam-policy-no-statements-with-admin-access -->
+  <rect x="45" y="246" width="235" height="48" rx="4" fill="#dd344c" stroke="#b02a3d" stroke-width="1.2"/>
+  <text x="162" y="261" text-anchor="middle" class="t-small">iam-policy-no-statements-with-admin-access</text>
+  <text x="162" y="274" text-anchor="middle" class="t-detail">IAM_POLICY_NO_STATEMENTS_WITH_ADMIN_ACCESS</text>
+  <text x="162" y="285" text-anchor="middle" class="t-detail" style="font-size:7.5px; fill:#fff;">AWS::IAM::Policy · global resource</text>
+
+  <!-- Arrow: Config → EventBridge -->
+  <line x1="162" y1="311" x2="162" y2="383" fill="none" stroke="#dd344c" stroke-width="1.8" marker-end="url(#ah-red)"/>
+  <text x="170" y="350" class="t-detail-dk" style="fill:#dd344c;">NON_COMPLIANT event</text>
+
+  <!-- EventBridge -->
+  <rect x="30" y="384" width="265" height="65" rx="4" fill="#E7157B" stroke="#b00e5e" stroke-width="1.2"/>
+  <text x="162" y="405" text-anchor="middle" class="t-label">Amazon EventBridge</text>
+  <text x="162" y="419" text-anchor="middle" class="t-detail">Config Compliance Change Rule</text>
+  <text x="162" y="432" text-anchor="middle" style="font-size:8px; fill:#fff;">terradriftguard-config-compliance-change</text>
+
+  <!-- Arrow: EventBridge → Step Functions (bent: right, up, right) -->
+  <!-- EventBridge right edge x=295, center_y=416; Lambda 1 center y=150; SFN left x=340 -->
+  <path d="M 295,416 L 325,416 L 325,150 L 340,150" fill="none" stroke="#E7157B" stroke-width="2" marker-end="url(#ah-pink)"/>
+
+  <!-- ================================================================ -->
+  <!-- STEP FUNCTIONS CONTAINER (center)                                 -->
+  <!-- ================================================================ -->
+  <rect x="340" y="68" width="375" height="535" rx="6" fill="#e8f0fe" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="527" y="88" text-anchor="middle" class="t-section" style="fill:#1a73e8;">AWS Step Functions</text>
+  <text x="527" y="103" text-anchor="middle" style="font-size:9px; fill:#495057;">terradriftguard-drift-remediation</text>
+
+  <!-- Lambda 1: Detect Drift -->
+  <rect x="383" y="120" width="292" height="60" rx="4" fill="#ff9900" stroke="#cc7a00" stroke-width="1.2"/>
+  <text x="529" y="140" text-anchor="middle" class="t-label">Lambda: Detect Drift</text>
+  <text x="529" y="154" text-anchor="middle" class="t-detail">Normalizes and enriches the Config event</text>
+  <text x="529" y="167" text-anchor="middle" class="t-detail">Extracts resource type, ID, rule name</text>
+
+  <!-- Arrow 1 → 2 -->
+  <line x1="529" y1="180" x2="529" y2="215" fill="none" stroke="#495057" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- Lambda 2: Query History -->
+  <rect x="383" y="215" width="292" height="60" rx="4" fill="#ff9900" stroke="#cc7a00" stroke-width="1.2"/>
+  <text x="529" y="235" text-anchor="middle" class="t-label">Lambda: Query History</text>
+  <text x="529" y="249" text-anchor="middle" class="t-detail">Reads prior incidents from DynamoDB</text>
+  <text x="529" y="262" text-anchor="middle" class="t-detail">Writes initial incident record</text>
+
+  <!-- Arrow 2 → 3 -->
+  <line x1="529" y1="275" x2="529" y2="310" fill="none" stroke="#495057" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- Lambda 3: Call Bedrock -->
+  <rect x="383" y="310" width="292" height="60" rx="4" fill="#ff9900" stroke="#cc7a00" stroke-width="1.2"/>
+  <text x="529" y="330" text-anchor="middle" class="t-label">Lambda: Call Bedrock</text>
+  <text x="529" y="344" text-anchor="middle" class="t-detail">Invokes Claude (Sonnet 4) on Amazon Bedrock</text>
+  <text x="529" y="357" text-anchor="middle" class="t-detail">Severity · intent · remediation reasoning</text>
+
+  <!-- Arrow 3 → 4 -->
+  <line x1="529" y1="370" x2="529" y2="405" fill="none" stroke="#495057" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- Lambda 4: Generate Terraform -->
+  <rect x="383" y="405" width="292" height="60" rx="4" fill="#ff9900" stroke="#cc7a00" stroke-width="1.2"/>
+  <text x="529" y="425" text-anchor="middle" class="t-label">Lambda: Generate Terraform</text>
+  <text x="529" y="439" text-anchor="middle" class="t-detail">Produces HCL remediation plan</text>
+  <text x="529" y="452" text-anchor="middle" class="t-detail">Drift type-specific templates</text>
+
+  <!-- Arrow 4 → 5 -->
+  <line x1="529" y1="465" x2="529" y2="500" fill="none" stroke="#495057" stroke-width="1.8" marker-end="url(#ah)"/>
+
+  <!-- Lambda 5: Validate and Escalate -->
+  <rect x="383" y="500" width="292" height="60" rx="4" fill="#ff9900" stroke="#cc7a00" stroke-width="1.2"/>
+  <text x="529" y="520" text-anchor="middle" class="t-label">Lambda: Validate &amp; Escalate</text>
+  <text x="529" y="534" text-anchor="middle" class="t-detail">Updates DynamoDB · publishes to SNS</text>
+  <text x="529" y="547" text-anchor="middle" class="t-detail">Opens GitHub PR (if token configured)</text>
+
+  <!-- ================================================================ -->
+  <!-- RIGHT SIDE SERVICES                                               -->
+  <!-- ================================================================ -->
+
+  <!-- DynamoDB — aligned with Lambda 2 center (y=245) -->
+  <rect x="775" y="215" width="200" height="72" rx="4" fill="#527fff" stroke="#3a5fcc" stroke-width="1.2"/>
+  <text x="875" y="237" text-anchor="middle" class="t-label">Amazon DynamoDB</text>
+  <text x="875" y="251" text-anchor="middle" class="t-detail">terradriftguard-incidents</text>
+  <text x="875" y="264" text-anchor="middle" class="t-detail">drift_type (PK) · timestamp (SK)</text>
+  <text x="875" y="277" text-anchor="middle" class="t-detail">on-demand · zero cost at rest</text>
+
+  <!-- Arrow Lambda 2 → DynamoDB -->
+  <line x1="675" y1="245" x2="775" y2="245" fill="none" stroke="#1a73e8" stroke-width="1.8" marker-end="url(#ah-blue)"/>
+  <text x="725" y="240" text-anchor="middle" class="t-detail-dk" style="fill:#1a73e8;">read / write</text>
+
+  <!-- DynamoDB update from Lambda 5 (bent path, dashed) -->
+  <path d="M 675,530 L 745,530 L 745,251 L 775,251" fill="none" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah-blue)"/>
+  <text x="738" y="392" text-anchor="middle" transform="rotate(-90,738,392)" style="font-size:8.5px; fill:#1a73e8;">update incident</text>
+
+  <!-- Bedrock — aligned with Lambda 3 center (y=340) -->
+  <rect x="775" y="308" width="200" height="72" rx="4" fill="#945bb4" stroke="#6d3f87" stroke-width="1.2"/>
+  <text x="875" y="330" text-anchor="middle" class="t-label">Amazon Bedrock</text>
+  <text x="875" y="344" text-anchor="middle" class="t-detail">claude-sonnet-4-20250514</text>
+  <text x="875" y="357" text-anchor="middle" class="t-detail">IAM auth · no API keys</text>
+  <text x="875" y="370" text-anchor="middle" class="t-detail">us cross-region inference</text>
+
+  <!-- Arrow Lambda 3 → Bedrock -->
+  <line x1="675" y1="340" x2="775" y2="340" fill="none" stroke="#945bb4" stroke-width="1.8" marker-end="url(#ah-purple)"/>
+  <text x="725" y="335" text-anchor="middle" class="t-detail-dk" style="fill:#945bb4;">invoke model</text>
+
+  <!-- SNS -->
+  <rect x="775" y="462" width="200" height="58" rx="4" fill="#e8334c" stroke="#c02a3f" stroke-width="1.2"/>
+  <text x="875" y="483" text-anchor="middle" class="t-label">Amazon SNS</text>
+  <text x="875" y="497" text-anchor="middle" class="t-detail">terradriftguard-drift-alerts</text>
+  <text x="875" y="510" text-anchor="middle" class="t-detail">Drift notification topic</text>
+
+  <!-- Arrow Lambda 5 → SNS -->
+  <line x1="675" y1="525" x2="775" y2="491" fill="none" stroke="#e8334c" stroke-width="1.8" marker-end="url(#ah-red)"/>
+  <text x="726" y="512" text-anchor="middle" class="t-detail-dk" style="fill:#e8334c;">publish</text>
+
+  <!-- GitHub PR -->
+  <rect x="775" y="535" width="200" height="73" rx="4" fill="#24292e" stroke="#111" stroke-width="1.2"/>
+  <text x="875" y="556" text-anchor="middle" class="t-label">GitHub Pull Request</text>
+  <text x="875" y="570" text-anchor="middle" class="t-detail">Terraform remediation branch</text>
+  <text x="875" y="583" text-anchor="middle" class="t-detail">Requires GITHUB_TOKEN secret</text>
+  <rect x="783" y="590" width="184" height="12" rx="2" fill="#e8334c" opacity="0.85"/>
+  <text x="875" y="600" text-anchor="middle" style="font-size:8px; font-weight:700; fill:#fff;">not exercised — token not configured</text>
+
+  <!-- Arrow Lambda 5 → GitHub PR (dashed = conditional) -->
+  <line x1="675" y1="545" x2="775" y2="558" fill="none" stroke="#24292e" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-dk)"/>
+  <text x="722" y="546" text-anchor="middle" style="font-size:8px; fill:#495057;">if token set</text>
+
+  <!-- ================================================================ -->
+  <!-- GITHUB ACTIONS (far right)                                        -->
+  <!-- ================================================================ -->
+  <rect x="1025" y="68" width="355" height="225" rx="6" fill="#f3eeff" stroke="#7b42bc" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="1202" y="88" text-anchor="middle" class="t-section" style="fill:#5c2e91;">GitHub Actions CI/CD</text>
+  <text x="1202" y="103" text-anchor="middle" style="font-size:9px; fill:#495057;">.github/workflows/terraform-validate.yml</text>
+
+  <!-- Terraform job -->
+  <rect x="1045" y="113" width="150" height="95" rx="4" fill="#7b42bc" stroke="#5c2e91" stroke-width="1.2"/>
+  <text x="1120" y="132" text-anchor="middle" class="t-label">Terraform Jobs</text>
+  <text x="1120" y="147" text-anchor="middle" class="t-detail">terraform init -backend=false</text>
+  <text x="1120" y="160" text-anchor="middle" class="t-detail">terraform validate</text>
+  <text x="1120" y="173" text-anchor="middle" class="t-detail">terraform fmt -check</text>
+  <text x="1120" y="186" text-anchor="middle" class="t-detail">No AWS credentials needed</text>
+  <text x="1120" y="199" text-anchor="middle" style="font-size:7.5px; fill:#fff;">(backend=false)</text>
+
+  <!-- Unit tests job -->
+  <rect x="1210" y="113" width="155" height="95" rx="4" fill="#7b42bc" stroke="#5c2e91" stroke-width="1.2"/>
+  <text x="1287" y="132" text-anchor="middle" class="t-label">Unit Tests</text>
+  <text x="1287" y="147" text-anchor="middle" class="t-detail">pytest tests/ -v</text>
+  <text x="1287" y="160" text-anchor="middle" class="t-detail">51 tests · 5 handlers</text>
+  <text x="1287" y="173" text-anchor="middle" class="t-detail">Mocked AWS calls</text>
+  <text x="1287" y="186" text-anchor="middle" class="t-detail">No AWS credentials</text>
+  <text x="1287" y="199" text-anchor="middle" style="font-size:7.5px; fill:#fff;">conftest.py shared fixtures</text>
+
+  <text x="1202" y="222" text-anchor="middle" class="t-detail-dk">Triggered on every PR and push to main</text>
+  <text x="1202" y="236" text-anchor="middle" class="t-detail-dk">Validates Terraform on every push</text>
+  <text x="1202" y="250" text-anchor="middle" class="t-detail-dk" style="font-size:8px;">No AWS credentials required — backend=false</text>
+
+  <!-- Arrow GitHub PR → GitHub Actions (bent path) -->
+  <!-- GitHub PR right x=975, center_y=569; GHA left x=1025, center_y=180 -->
+  <path d="M 975,569 L 1005,569 L 1005,180 L 1025,180" fill="none" stroke="#7b42bc" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-gha)"/>
+  <text x="1008" y="385" text-anchor="start" style="font-size:8.5px; fill:#7b42bc;">on PR open</text>
+
+  <!-- ================================================================ -->
+  <!-- BOTTOM PANELS                                                     -->
+  <!-- ================================================================ -->
+
+  <!-- Panel 1: Pipeline Flow -->
+  <rect x="15" y="625" width="455" height="370" rx="6" fill="#fff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="35" y="650" class="t-legend-h">Pipeline Flow</text>
+  <text x="35" y="669" class="t-legend">1. AWS Config evaluates resources against 3 managed rules continuously.</text>
+  <text x="35" y="684" class="t-legend">   A resource modification triggers a NON_COMPLIANT evaluation.</text>
+  <text x="35" y="701" class="t-legend">2. EventBridge captures the compliance change event and starts</text>
+  <text x="35" y="716" class="t-legend">   the Step Functions state machine automatically.</text>
+  <text x="35" y="733" class="t-legend">3. Detect Drift normalizes the raw Config payload into a structured</text>
+  <text x="35" y="748" class="t-legend">   drift record with resource type, ID, and rule name.</text>
+  <text x="35" y="765" class="t-legend">4. Query History reads prior incidents of the same drift type</text>
+  <text x="35" y="780" class="t-legend">   from DynamoDB and writes an initial incident record.</text>
+  <text x="35" y="797" class="t-legend">5. Call Bedrock invokes Claude Sonnet 4 on Amazon Bedrock,</text>
+  <text x="35" y="812" class="t-legend">   returning severity, intent assessment, and remediation reasoning.</text>
+  <text x="35" y="829" class="t-legend">6. Generate Terraform produces a drift type-specific HCL plan.</text>
+  <text x="35" y="846" class="t-legend">7. Validate &amp; Escalate updates the DynamoDB incident, publishes an</text>
+  <text x="35" y="861" class="t-legend">   SNS alert, and opens a GitHub PR if a token is configured.</text>
+  <text x="35" y="885" class="t-legend-h">Drift Scenarios Demonstrated</text>
+  <text x="35" y="903" class="t-legend">• Security group open SSH — CRITICAL — auto-triggered via Config</text>
+  <text x="35" y="919" class="t-legend">• S3 bucket public read — HIGH — auto-triggered via Config</text>
+  <text x="35" y="935" class="t-legend">• IAM admin policy — CRITICAL — auto-triggered via Config</text>
+  <text x="35" y="951" class="t-legend">• Unencrypted EBS volume — MEDIUM — CLI trigger (test event)</text>
+  <text x="35" y="972" class="t-cost">Full execution time: ~12–14 seconds per pipeline run</text>
+  <text x="35" y="985" class="t-cost">5 Step Functions executions · 49 Lambda invocations · 15 Bedrock calls</text>
+
+  <!-- Panel 2: Legend -->
+  <rect x="485" y="625" width="355" height="370" rx="6" fill="#fff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="505" y="650" class="t-legend-h">Legend</text>
+
+  <rect x="505" y="660" width="14" height="14" rx="2" fill="#ff9900" stroke="#cc7a00" stroke-width="1"/>
+  <text x="526" y="672" class="t-legend">AWS Lambda function (pipeline step)</text>
+
+  <rect x="505" y="680" width="14" height="14" rx="2" fill="#527fff" stroke="#3a5fcc" stroke-width="1"/>
+  <text x="526" y="692" class="t-legend">Amazon DynamoDB (incident store)</text>
+
+  <rect x="505" y="700" width="14" height="14" rx="2" fill="#945bb4" stroke="#6d3f87" stroke-width="1"/>
+  <text x="526" y="712" class="t-legend">Amazon Bedrock (AI reasoning — Claude Sonnet 4)</text>
+
+  <rect x="505" y="720" width="14" height="14" rx="2" fill="#dd344c" stroke="#b02a3d" stroke-width="1"/>
+  <text x="526" y="732" class="t-legend">AWS Config managed rule</text>
+
+  <rect x="505" y="740" width="14" height="14" rx="2" fill="#E7157B" stroke="#b00e5e" stroke-width="1"/>
+  <text x="526" y="752" class="t-legend">Amazon EventBridge rule</text>
+
+  <rect x="505" y="760" width="14" height="14" rx="2" fill="#e8334c" stroke="#c02a3f" stroke-width="1"/>
+  <text x="526" y="772" class="t-legend">Amazon SNS (drift alerts)</text>
+
+  <rect x="505" y="780" width="14" height="14" rx="2" fill="#24292e" stroke="#111" stroke-width="1"/>
+  <text x="526" y="792" class="t-legend">GitHub Pull Request (Terraform remediation)</text>
+
+  <rect x="505" y="800" width="14" height="14" rx="2" fill="#7b42bc" stroke="#5c2e91" stroke-width="1"/>
+  <text x="526" y="812" class="t-legend">GitHub Actions CI/CD pipeline</text>
+
+  <line x1="505" y1="830" x2="535" y2="830" fill="none" stroke="#495057" stroke-width="1.8" marker-end="url(#ah)"/>
+  <text x="543" y="834" class="t-legend">Sequential pipeline step</text>
+
+  <line x1="505" y1="850" x2="535" y2="850" fill="none" stroke="#1a73e8" stroke-width="1.8" marker-end="url(#ah-blue)"/>
+  <text x="543" y="854" class="t-legend">DynamoDB read / write (Lambda: Query History)</text>
+
+  <line x1="505" y1="870" x2="535" y2="870" fill="none" stroke="#945bb4" stroke-width="1.8" marker-end="url(#ah-purple)"/>
+  <text x="543" y="874" class="t-legend">Bedrock model invocation (Lambda: Call Bedrock)</text>
+
+  <line x1="505" y1="890" x2="535" y2="890" fill="none" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ah-blue)"/>
+  <text x="543" y="894" class="t-legend">DynamoDB incident update (Lambda: Validate &amp; Escalate)</text>
+
+  <line x1="505" y1="910" x2="535" y2="910" fill="none" stroke="#495057" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah)"/>
+  <text x="543" y="914" class="t-legend">Conditional action (GITHUB_TOKEN required)</text>
+
+  <line x1="505" y1="930" x2="535" y2="930" fill="none" stroke="#E7157B" stroke-width="2" marker-end="url(#ah-pink)"/>
+  <text x="543" y="934" class="t-legend">EventBridge → Step Functions trigger</text>
+
+  <!-- Panel 3: Key Decisions + Cost -->
+  <rect x="855" y="625" width="525" height="370" rx="6" fill="#fff" stroke="#dee2e6" stroke-width="1"/>
+  <text x="875" y="650" class="t-legend-h">Key Decisions</text>
+  <text x="875" y="669" class="t-legend">Bedrock over direct API: IAM auth eliminates API keys; entire architecture</text>
+  <text x="875" y="684" class="t-legend">stays inside AWS; native CloudWatch metrics on LLM invocations.</text>
+  <text x="875" y="701" class="t-legend">DynamoDB over PostgreSQL: different drift types carry different attributes.</text>
+  <text x="875" y="716" class="t-legend">DynamoDB handles semi-structured data natively without schema migrations.</text>
+  <text x="875" y="733" class="t-legend">Step Functions over single Lambda: per-step error handling, retry logic,</text>
+  <text x="875" y="748" class="t-legend">and a visual workflow diagram as both debugging tool and demo artifact.</text>
+  <text x="875" y="765" class="t-legend">One IAM role per Lambda: each function is scoped to only the services it</text>
+  <text x="875" y="780" class="t-legend">touches — least privilege enforced at the architecture level.</text>
+  <text x="875" y="797" class="t-legend">Contract-first design: Step Functions ASL defined first; DynamoDB schema</text>
+  <text x="875" y="812" class="t-legend">and Lambda handlers derived from it in pipeline order.</text>
+
+  <text x="875" y="838" class="t-legend-h">Actual Cost — 2-Day Deployment Window (March 3–4, 2026)</text>
+  <text x="875" y="856" class="t-cost">Bedrock — Claude Sonnet 4 · 15 calls · ~22k input + 12k output tokens ........... ~$0.20–0.50</text>
+  <text x="875" y="872" class="t-cost">Lambda — 49 invocations · 128 MB memory ............................................................. &lt;$0.01</text>
+  <text x="875" y="888" class="t-cost">Step Functions — 5 executions · ~30 state transitions ............................................. &lt;$0.01</text>
+  <text x="875" y="904" class="t-cost">DynamoDB on-demand — 4 writes, a few reads .......................................................... &lt;$0.01</text>
+  <text x="875" y="920" class="t-cost">AWS Config rule evaluations + EventBridge ................................................................ ~$0.10</text>
+  <text x="875" y="936" class="t-cost" style="font-weight:700; font-size:10px;">Total: under $1     (infrastructure provisioned for 1–2 days, then destroyed)</text>
+
+  <!-- Footer -->
+  <text x="700" y="1010" text-anchor="middle" class="t-sub" style="font-size:11px;">TerraDriftGuard — Designed and implemented by Malik Hamdane — 2026</text>
+</svg>

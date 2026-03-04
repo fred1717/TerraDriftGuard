@@ -56,8 +56,8 @@ Authentication is IAM-native — no API keys, no Secrets Manager for the AI laye
 Incident history is stored in DynamoDB (on-demand mode — zero cost at rest).  
 CI/CD validation runs via GitHub Actions (`terraform validate` + `terraform plan`).
 
-A full architecture diagram will be added to `docs/diagrams/` after deployment.
-
+The diagram below covers the full pipeline from drift detection through AI analysis to Terraform remediation, including all supporting services and the CI/CD layer.
+![Architecture Diagram](docs/diagrams/terradriftguard-architecture.svg)
 
 
 ## 3. Tech Stack
@@ -1618,19 +1618,28 @@ git commit -m "Post-deployment: README updated with deployment evidence and tear
 git push
 ```
 **Example output**
+2 files changed, 127 insertions(+), 14 deletions(-)
 
+**Creating a new release on GitHub (from the project root folder)**
+```bash
+gh release create v1.0.0 --title "TerraDriftGuard v1.0.0" --notes "Initial release: full deployment lifecycle completed. Infrastructure provisioned, three drift scenarios validated end-to-end, evidence captured, infrastructure destroyed."
+```
 
+**Fix CI: add boto3 and moto to requirements-dev.txt, fix Terraform formatting (from `terraform` folder)**
+```bash
+git add .
+git commit -m "Fix CI: add boto3 and moto to requirements-dev.txt, fix Terraform formatting"
+git push
+```
 
-
-
-
-
-- final push
-- repository cleanup
-
-
-
----
+**Creating a final release on GitHub (from the project root folder)**
+Adding a diagram, updating `repository_structure.md`, completing the README.
+```bash
+git add .
+git commit -m "Add architecture diagram, complete README, update repository structure"
+git push
+gh release create v1.0.0 --title "TerraDriftGuard v1.0.0" --notes "final release: full deployment lifecycle completed. Infrastructure provisioned via Terraform, three drift scenarios validated end-to-end, evidence captured, infrastructure destroyed."
+```
 
 Designed and implemented by Malik Hamdane.  
 https://github.com/fred1717/TerraDriftGuard
