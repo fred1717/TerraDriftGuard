@@ -1,0 +1,47 @@
+{
+  "version": "0",
+  "id": "b2c3d4e5-6789-01bc-defg-EXAMPLE22222",
+  "detail-type": "Config Rules Compliance Change",
+  "source": "aws.config",
+  "account": "123456789012",
+  "time": "2025-02-28T15:07:43Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "resourceId": "terradriftguard-artifacts-prod",
+    "awsRegion": "us-east-1",
+    "awsAccountId": "123456789012",
+    "configRuleName": "s3-bucket-public-read-prohibited",
+    "resourceType": "AWS::S3::Bucket",
+    "newEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "s3-bucket-public-read-prohibited",
+          "resourceType": "AWS::S3::Bucket",
+          "resourceId": "terradriftguard-artifacts-prod"
+        },
+        "orderingTimestamp": "2025-02-28T15:07:43.210Z"
+      },
+      "complianceType": "NON_COMPLIANT",
+      "resultRecordedTime": "2025-02-28T15:07:43.567Z",
+      "configRuleInvokedTime": "2025-02-28T15:07:42.890Z",
+      "annotation": "Bucket terradriftguard-artifacts-prod has BlockPublicAccess disabled and a bucket policy allowing s3:GetObject to principal *.",
+      "resultToken": "null"
+    },
+    "oldEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "s3-bucket-public-read-prohibited",
+          "resourceType": "AWS::S3::Bucket",
+          "resourceId": "terradriftguard-artifacts-prod"
+        },
+        "orderingTimestamp": "2025-02-25T11:30:00.000Z"
+      },
+      "complianceType": "COMPLIANT",
+      "resultRecordedTime": "2025-02-25T11:30:00.456Z",
+      "configRuleInvokedTime": "2025-02-25T11:30:00.123Z"
+    },
+    "notificationCreationTime": "2025-02-28T15:07:44.000Z",
+    "messageType": "ComplianceChangeNotification"
+  }
+}

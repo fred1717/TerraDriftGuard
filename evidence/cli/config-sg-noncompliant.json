@@ -1,0 +1,18 @@
+{
+    "EvaluationResults": [
+        {
+            "EvaluationResultIdentifier": {
+                "EvaluationResultQualifier": {
+                    "ConfigRuleName": "restricted-ssh",
+                    "ResourceType": "AWS::EC2::SecurityGroup",
+                    "ResourceId": "sg-020e5918d504d1a76",
+                    "EvaluationMode": "DETECTIVE"
+                },
+                "OrderingTimestamp": "2026-03-03T16:53:53.165000+01:00"
+            },
+            "ComplianceType": "NON_COMPLIANT",
+            "ResultRecordedTime": "2026-03-03T16:54:28.354000+01:00",
+            "ConfigRuleInvokedTime": "2026-03-03T16:54:28.157000+01:00"
+        }
+    ]
+}

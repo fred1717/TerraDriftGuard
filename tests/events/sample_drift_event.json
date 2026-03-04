@@ -1,0 +1,47 @@
+{
+  "version": "0",
+  "id": "d4e5f6a7-8901-23bc-def0-EXAMPLE44444",
+  "detail-type": "Config Rules Compliance Change",
+  "source": "aws.config",
+  "account": "123456789012",
+  "time": "2025-03-01T10:30:00Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "resourceId": "vol-0abc123def456789a",
+    "awsRegion": "us-east-1",
+    "awsAccountId": "123456789012",
+    "configRuleName": "encrypted-volumes",
+    "resourceType": "AWS::EC2::Volume",
+    "newEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "encrypted-volumes",
+          "resourceType": "AWS::EC2::Volume",
+          "resourceId": "vol-0abc123def456789a"
+        },
+        "orderingTimestamp": "2025-03-01T10:30:00.123Z"
+      },
+      "complianceType": "NON_COMPLIANT",
+      "resultRecordedTime": "2025-03-01T10:30:00.456Z",
+      "configRuleInvokedTime": "2025-03-01T10:29:59.789Z",
+      "annotation": "EBS volume vol-0abc123def456789a is not encrypted.",
+      "resultToken": "null"
+    },
+    "oldEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "encrypted-volumes",
+          "resourceType": "AWS::EC2::Volume",
+          "resourceId": "vol-0abc123def456789a"
+        },
+        "orderingTimestamp": "2025-02-28T08:00:00.000Z"
+      },
+      "complianceType": "COMPLIANT",
+      "resultRecordedTime": "2025-02-28T08:00:00.456Z",
+      "configRuleInvokedTime": "2025-02-28T08:00:00.123Z"
+    },
+    "notificationCreationTime": "2025-03-01T10:30:01.000Z",
+    "messageType": "ComplianceChangeNotification"
+  }
+}

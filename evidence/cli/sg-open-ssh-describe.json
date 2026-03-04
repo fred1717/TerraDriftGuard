@@ -1,0 +1,50 @@
+{
+    "SecurityGroups": [
+        {
+            "GroupId": "sg-020e5918d504d1a76",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ],
+            "Tags": [
+                {
+                    "Key": "Name",
+                    "Value": "test-ssh-drift"
+                },
+                {
+                    "Key": "Project",
+                    "Value": "TerraDriftGuard"
+                }
+            ],
+            "VpcId": "vpc-0db9e1006f2e4a584",
+            "SecurityGroupArn": "arn:aws:ec2:us-east-1:180294215772:security-group/sg-020e5918d504d1a76",
+            "OwnerId": "180294215772",
+            "GroupName": "test-ssh-drift",
+            "Description": "TerraDriftGuard SSH drift test",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "tcp",
+                    "FromPort": 22,
+                    "ToPort": 22,
+                    "UserIdGroupPairs": [],
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": []
+                }
+            ]
+        }
+    ]
+}

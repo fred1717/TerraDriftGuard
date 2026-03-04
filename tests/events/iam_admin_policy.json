@@ -1,0 +1,47 @@
+{
+  "version": "0",
+  "id": "c3d4e5f6-7890-12cd-efgh-EXAMPLE33333",
+  "detail-type": "Config Rules Compliance Change",
+  "source": "aws.config",
+  "account": "123456789012",
+  "time": "2025-02-28T16:45:11Z",
+  "region": "us-east-1",
+  "resources": [],
+  "detail": {
+    "resourceId": "AROAEXAMPLEID12345",
+    "awsRegion": "us-east-1",
+    "awsAccountId": "123456789012",
+    "configRuleName": "iam-policy-no-statements-with-admin-access",
+    "resourceType": "AWS::IAM::Role",
+    "newEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "iam-policy-no-statements-with-admin-access",
+          "resourceType": "AWS::IAM::Role",
+          "resourceId": "AROAEXAMPLEID12345"
+        },
+        "orderingTimestamp": "2025-02-28T16:45:11.300Z"
+      },
+      "complianceType": "NON_COMPLIANT",
+      "resultRecordedTime": "2025-02-28T16:45:11.678Z",
+      "configRuleInvokedTime": "2025-02-28T16:45:10.912Z",
+      "annotation": "IAM role app-backend-execution-role has the AWS managed policy AdministratorAccess attached, granting Action:* on Resource:*.",
+      "resultToken": "null"
+    },
+    "oldEvaluationResult": {
+      "evaluationResultIdentifier": {
+        "evaluationResultQualifier": {
+          "configRuleName": "iam-policy-no-statements-with-admin-access",
+          "resourceType": "AWS::IAM::Role",
+          "resourceId": "AROAEXAMPLEID12345"
+        },
+        "orderingTimestamp": "2025-02-26T08:00:00.000Z"
+      },
+      "complianceType": "COMPLIANT",
+      "resultRecordedTime": "2025-02-26T08:00:00.456Z",
+      "configRuleInvokedTime": "2025-02-26T08:00:00.123Z"
+    },
+    "notificationCreationTime": "2025-02-28T16:45:12.000Z",
+    "messageType": "ComplianceChangeNotification"
+  }
+}

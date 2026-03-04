@@ -1,0 +1,19 @@
+{
+    "EvaluationResults": [
+        {
+            "EvaluationResultIdentifier": {
+                "EvaluationResultQualifier": {
+                    "ConfigRuleName": "s3-bucket-public-read-prohibited",
+                    "ResourceType": "AWS::S3::Bucket",
+                    "ResourceId": "terradriftguard-public-read-test",
+                    "EvaluationMode": "DETECTIVE"
+                },
+                "OrderingTimestamp": "2026-03-04T10:40:30.849000+01:00"
+            },
+            "ComplianceType": "NON_COMPLIANT",
+            "ResultRecordedTime": "2026-03-04T10:41:07.374000+01:00",
+            "ConfigRuleInvokedTime": "2026-03-04T10:41:06.979000+01:00",
+            "Annotation": "The S3 bucket policy allows public read access."
+        }
+    ]
+}

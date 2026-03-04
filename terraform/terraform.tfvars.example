@@ -1,0 +1,12 @@
+aws_region          = "us-east-1"
+dynamodb_table_name = "terradriftguard-incidents"
+bedrock_model_id    = "us.anthropic.claude-sonnet-4-20250514-v1:0"
+github_token_secret = "terradriftguard/github-token"
+github_repo_owner   = "fred1717"
+github_repo_name    = "TerraDriftGuard"
+
+tags = {
+  Project   = "TerraDriftGuard"
+  ManagedBy = "Terraform"
+}
+

@@ -1,0 +1,18 @@
+{
+    "EvaluationResults": [
+        {
+            "EvaluationResultIdentifier": {
+                "EvaluationResultQualifier": {
+                    "ConfigRuleName": "iam-policy-no-statements-with-admin-access",
+                    "ResourceType": "AWS::IAM::Policy",
+                    "ResourceId": "ANPAST6S7NBOJHVHWM74M",
+                    "EvaluationMode": "DETECTIVE"
+                },
+                "OrderingTimestamp": "2026-03-04T12:50:45.237000+01:00"
+            },
+            "ComplianceType": "NON_COMPLIANT",
+            "ResultRecordedTime": "2026-03-04T12:51:22.855000+01:00",
+            "ConfigRuleInvokedTime": "2026-03-04T12:51:22.506000+01:00"
+        }
+    ]
+}
