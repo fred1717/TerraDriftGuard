@@ -75,6 +75,7 @@ TerraDriftGuard/
     
 
     scripts/
+        format_dynamodb.py
         format_evidence.py
 
 

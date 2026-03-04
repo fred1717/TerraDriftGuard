@@ -71,7 +71,7 @@ A full architecture diagram will be added to `docs/diagrams/` after deployment.
 | Incident tracking  | Amazon DynamoDB                                                          |
 | Infrastructure     | Terraform (HCL)                                                          |
 | CI/CD              | GitHub Actions                                                           |
-| Development        | PyCharm, DataGrip, ChatGPT, Claude Sonnet 4.5 and Opus 4.6, Gemini 3     |
+| Development        | PyCharm, DataGrip, ChatGPT, Claude Sonnet 3.5, 3.7, 4, 4.5 and Opus 4.6  |
 
 
 
@@ -169,7 +169,7 @@ Each project introduces services not covered by the previous ones. TerraDriftGua
 The core agent logic is developed and tested locally using PyCharm.  
 Simulated AWS Config compliance change events (stored in `tests/events/`) are passed through the agent logic.  
 Terraform output is validated locally via `terraform validate`.  
-Prompt engineering for the Bedrock call is iterated using ChatGPT, Claude Sonnet 4.5 or Opus 4.6, Gemini 3 (for development; Bedrock is used only at runtime inside AWS).
+Prompt engineering for the Bedrock call is iterated using Claude Sonnet 3.5, 3.7, 4 (for development; Bedrock is used only at runtime inside AWS).
 
 **Design methodology:**
 - The Step Function state machine was defined first as the foundational contract, establishing the data flow and input/output expectations for every stage before any Lambda code was written.
@@ -183,9 +183,11 @@ Prompt engineering for the Bedrock call is iterated using ChatGPT, Claude Sonnet
 
 The same contract-first pattern applied to the Terraform layer: the root `main.tf` was written before any module, defining the inputs and outputs each module must accept and expose.  
 Individual modules were then built in dependency order: 
-- `step_functions`
+- `dynamodb`
+`step_functions`
 - `lambda`
 - `eventbridge`
+- `config`
 
 **Testing:**  
 Unit tests live in `tests/`, one file per Lambda handler, with shared fixtures in `conftest.py`.  
@@ -212,7 +214,7 @@ The infrastructure is then destroyed.
 **Tools:**  
 - **PyCharm** — Python development, boto3 autocomplete, Terraform HCL plugin, AWS Toolkit for DynamoDB browsing, step-through debugging of agent logic
 - **DataGrip** — DynamoDB table inspection during development
-- **ChatGPT, Claude Sonnet 4.5 and Opus 4.6, Gemini 3** — Architecture design, code generation, prompt engineering
+- **ChatGPT 3, Claude Sonnet 4.5 and Opus 4.6** — Architecture design, code generation, prompt engineering
 
 
 
@@ -223,7 +225,7 @@ The infrastructure is then destroyed.
 - all five Lambda handlers written
 - The full test suite was executed via `pytest tests/ -v` from the project root in WSL.  
     All 51 tests passed after debugging incomplete mock paths and import resolution
-- Terraform was initialized via `terraform init -backend=false` from the `terraform/ directory`.
+- Terraform was initialized via `terraform init -backend=false` from the `terraform/` directory.
     This downloads provider plugins and resolves module references without requiring AWS credentials or a state backend. 
 - Validation was then run via `terraform validate`: the configuration was valid.
 - One can now proceed with the AWS deployment.
@@ -341,7 +343,7 @@ So, 31 actual AWS resources — which means that all is accounted for.
 
 #### 10.1.2 AWS Config issues
 This is the simplest event to trigger.
-This consists in creating a security group in the console and add an inbound rule allowing SSH (port 22) from 0.0.0.0/0.  
+This consists in creating a security group in the console and adding an inbound rule allowing SSH (port 22) from 0.0.0.0/0.  
 This should trigger the following:
 - `AWS Config` will detect the non-compliance
 - it will fire the `EventBridge` event into the pipeline.
@@ -571,7 +573,7 @@ aws configservice describe-configuration-recorders
 }
 ```
 **Explanation**
-The recorder has been deleted, so have the rules. We now have a clean slate.
+The recorder has been deleted, so have the rules. The slate is now clean.
 
 #### 10.1.4 AWS Config Module
 Three files for terraform/modules/config/:
@@ -673,7 +675,7 @@ module.lambda.data.aws_iam_policy_document.lambda_assume
 module.config.data.aws_caller_identity.current
 ```
 
-### 10.2 Triggering a live drift events: security group test
+### 10.2 Triggering a live drift event: security group test
 #### 10.2.1 Security group (sg_open_ssh)
 This consists in creating a security group in the console and add an inbound rule allowing SSH (port 22) from 0.0.0.0/0.  
 This should trigger the following:
@@ -1030,7 +1032,7 @@ echo $EXEC_ARN
 ```
 
 
-### 10.3 Triggering a live drift events: S3 Bucket
+### 10.3 Triggering a live drift event: S3 Bucket
 Let's create an actual public S3 bucket and wait for Config to flag it.  
 However, AWS enables S3 Block Public Access at the account level by default.  
 Therefore, the bucket-level setting needs to override it.  
@@ -1047,7 +1049,7 @@ aws s3api create-bucket --bucket terradriftguard-public-read-test --region us-ea
 }
 ```
 
-**Disabling public access block on the bucket (from athe project root folder)**
+**Disabling public access block on the bucket (from the project root folder)**
 ```bash
 aws s3api put-public-access-block --bucket terradriftguard-public-read-test --public-access-block-configuration BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false --no-cli-pager
 ```
@@ -1320,7 +1322,7 @@ aws configservice get-compliance-details-by-config-rule --config-rule-name iam-p
 [CLI output](evidence/cli/config-iam-noncompliant.json)
 
 **Evidence summary**
-- AWS Config flagged IAM policy ANPAST6S7NBOJHVHWM74M as NON_COMPLIANT against the `iam-policy-no-statements-with-admin-access rule`
+- AWS Config flagged IAM policy ANPAST6S7NBOJHVHWM74M as NON_COMPLIANT against the `iam-policy-no-statements-with-admin-access` rule
 - It took around 37 seconds to detect: from `OrderingTimestamp` (12:50:45) to `ResultRecordedTime` (12:51:22)
 
 **Capturing the Step Functions execution output**
@@ -1358,7 +1360,7 @@ aws stepfunctions describe-execution --execution-arn $EXEC_ARN --output json --n
 [CLI output](evidence/cli/sample_drift_event.txt)
 
 **Evidence summary**
-- The Pipeline processed a synthetic unencrypted EBS volume event via CLI trigger. 
+- The pipeline processed a synthetic unencrypted EBS volume event via CLI trigger. 
 - Bedrock:
     - classified it as MEDIUM risk
     - identified it as likely accidental
@@ -1395,10 +1397,10 @@ It confirms the pipeline writes structured incident records for every event proc
 
 
 ### 10.7 Actual Cost
-#### 10.7.1 check the tag-based costs in Cost Explorer
+#### 10.7.1 Check the tag-based costs in Cost Explorer
 From the AWS Console: 
 - Billing and Cost Management → Cost Allocation Tags → Project: click on ACTIVATE.  
-It should have been done before. Now it cannot be used. That was a stupid miss.
+It should have been done before. Activating cost allocation tags before deployment would have enabled tag-based filtering.
 
 If it had been activated beforehand, the process would have been:
 - Billing and Cost Management → Cost Explorer → filter by tag Project: `TerraDriftGuard`.  
@@ -1500,6 +1502,7 @@ In the end, the total estimated actual cost for the deployment window is under $
 
 
 ### 10.8 Teardown
+#### 10.8.1 Running `terraform destroy`
 - `terraform destroy`
 - delete test resources:
     - S3 bucket
@@ -1508,11 +1511,120 @@ In the end, the total estimated actual cost for the deployment window is under $
     - VPC
 - clean up S3 buckets
 
+**From the `terraform` directory**
+```bash
+terraform destroy
+```
+**Expected output**
+```text
+Destroy complete! Resources: 39 destroyed
+```
 
+#### 10.8.2 Sanity check
+In the AWS Console:
+- The DynamoDB table is gone, so are the `terradriftguard-incidents`
+- SNS topics are gone
+- AWS Rules are gone
+- Step Functions are gone
 
+**Bad errors**
+- The security group `test-ssh-drift` is still there
+- The S3 bucket `terradriftguard-public-read-test` is still there too.
+That means these two resources were created outside terraform, which is rather bad practice, as they now need to be destroyed separately.
+In a portfolio project centred on Infrastructure as Code (IaC) discipline, this is a meaningful inconsistency that should have been caught earlier
+
+**Destroying resources (from the project root directory)**
+```bash
+# Delete the SG (get the ID first)
+aws ec2 describe-security-groups --filters "Name=group-name,Values=test-ssh-drift" --query "SecurityGroups[0].GroupId" --output text
+
+# Then delete it
+aws ec2 delete-security-group --group-id sg-020e5918d504d1a76
+
+# Delete the S3 bucket (must be empty first)
+aws s3 rm s3://terradriftguard-public-read-test --recursive
+aws s3api delete-bucket --bucket terradriftguard-public-read-test
+
+# Get the VPC ID
+VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Name,Values=terradriftguard-vpc" --query "Vpcs[0].VpcId" --output text)
+
+# Delete the 6 subnets
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" --query "Subnets[*].SubnetId" --output text | tr '\t' '\n' | xargs -I {} aws ec2 delete-subnet --subnet-id {}
+
+# Delete non-main route tables
+aws ec2 describe-route-tables --filters "Name=vpc-id,Values=$VPC_ID" "Name=association.main,Values=false" --query "RouteTables[*].RouteTableId" --output text | tr '\t' '\n' | xargs -I {} aws ec2 delete-route-table --route-table-id {}
+
+# Detach and delete internet gateway (if any)
+IGW_ID=$(aws ec2 describe-internet-gateways --filters "Name=attachment.vpc-id,Values=$VPC_ID" --query "InternetGateways[0].InternetGatewayId" --output text)
+aws ec2 detach-internet-gateway --internet-gateway-id $IGW_ID --vpc-id $VPC_ID
+aws ec2 delete-internet-gateway --internet-gateway-id $IGW_ID
+
+# Delete the VPC
+aws ec2 delete-vpc --vpc-id $VPC_ID
+```
+There are now no more project resources available.
 
 
 ### 10.9 GitHub
+#### 10.9.1 GitHub initialisation to be completed before running `terraform destroy`
+**After creating a new repository called "TerraDriftGuard", setting its description (from the project root folder):**
+```bash
+gh repo edit fred1717/TerraDriftGuard --description "Agentic SRE system that detects AWS infrastructure drift, analyzes it with Amazon Bedrock, and generates Terraform remediation plans via Step Functions."
+```
+
+**Initialize and connect the root project folder with the Git repository of the same name**
+```bash
+git init
+git remote add origin https://github.com/fred1717/TerraDriftGuard.git
+git branch -M main
+```
+
+**Stage everything, commit and push**
+```bash
+git add .
+git commit -m "Initial commit: TerraDriftGuard project structure"
+git push -u origin main
+```
+**Example output**
+```text
+Total 96 (delta 10), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (10/10), done.
+To https://github.com/fred1717/TerraDriftGuard.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+```
+**Explanation**
+- Total 96 (delta 10):
+    - `git` packed 96 objects (files, directories, commits).
+    - it found 10 places where it could save space by storing only the differences between similar content.
+- Resolving deltas: 100% — that compression completed successfully
+- [new branch] main -> main — the main branch was created on GitHub (it didn't exist there yet)
+- branch 'main' set up to track 'origin/main' — the local branch is now linked to the remote.
+    Now future `git push` and `git pull` commands will know where to go without extra arguments.
+
+The repository is now live at https://github.com/fred1717/TerraDriftGuard .
+That part needed to be completed before `terraform destroy`.  
+Now that the code is safely in GitHub, nothing will be lost when the infrastructure is torn down. See [10.8](#108-teardown)
+
+
+#### 10.9.2 Final pushes after running `terraform destroy`
+The infrastructure has been torn down.  
+The final commits capture the post-deployment updates to the README and repository structure.
+
+**From the project root folder**
+```bash
+git add .
+git commit -m "Post-deployment: README updated with deployment evidence and teardown"
+git push
+```
+**Example output**
+
+
+
+
+
+
+
 - final push
 - repository cleanup
 
