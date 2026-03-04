@@ -1638,7 +1638,7 @@ Adding a diagram, updating `repository_structure.md`, completing the README.
 git add .
 git commit -m "Add architecture diagram, complete README, update repository structure"
 git push
-gh release create v1.0.0 --title "TerraDriftGuard v1.0.0" --notes "final release: full deployment lifecycle completed. Infrastructure provisioned via Terraform, three drift scenarios validated end-to-end, evidence captured, infrastructure destroyed."
+gh release create v1.0.1 --title "TerraDriftGuard v1.0.1" --notes "final release: full deployment lifecycle completed. Infrastructure provisioned via Terraform, three drift scenarios validated end-to-end, evidence captured, infrastructure destroyed."
 ```
 
 Designed and implemented by Malik Hamdane.  
