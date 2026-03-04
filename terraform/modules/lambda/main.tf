@@ -242,8 +242,8 @@ resource "aws_iam_role_policy" "call_bedrock_invoke" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect   = "Allow"
-        Action   = "bedrock:InvokeModel"
+        Effect = "Allow"
+        Action = "bedrock:InvokeModel"
         Resource = [
           "arn:aws:bedrock:us-east-1:${data.aws_caller_identity.current.account_id}:inference-profile/${var.bedrock_model_id}",
           "arn:aws:bedrock:*::foundation-model/${trimprefix(var.bedrock_model_id, "us.")}"

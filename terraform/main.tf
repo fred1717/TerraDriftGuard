@@ -68,10 +68,10 @@ module "lambda" {
 module "step_functions" {
   source = "./modules/step_functions"
 
-  detect_drift_function_arn      = module.lambda.detect_drift_function_arn
-  query_history_function_arn      = module.lambda.query_history_function_arn
-  call_bedrock_function_arn = module.lambda.call_bedrock_function_arn
-  generate_terraform_function_arn   = module.lambda.generate_terraform_function_arn
+  detect_drift_function_arn          = module.lambda.detect_drift_function_arn
+  query_history_function_arn         = module.lambda.query_history_function_arn
+  call_bedrock_function_arn          = module.lambda.call_bedrock_function_arn
+  generate_terraform_function_arn    = module.lambda.generate_terraform_function_arn
   validate_and_escalate_function_arn = module.lambda.validate_and_escalate_function_arn
 
   dynamodb_table_name = module.dynamodb.table_name
