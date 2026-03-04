@@ -51,5 +51,7 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Run Tests
+        env:
+          AWS_DEFAULT_REGION: us-east-1
         run: pytest tests/ -v
 
